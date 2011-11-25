@@ -1,0 +1,69 @@
+<html>
+<head>
+<script type="text/javascript" src="neural-network.js"></script>
+<script type="text/javascript" src="neuron-layer.js"></script>
+<script type="text/javascript" src="neuron.js"></script>
+<script type="text/javascript" src="genome.js"></script>
+<script type="text/javascript" src="ant.js"></script>
+<script type="text/javascript" src="arena.js"></script>
+<script type="text/javascript" src="renderer.js"></script>
+<script type="text/javascript">
+var ants = [];
+var stillActive = true;
+var arena = new Arena();
+var display_ant;
+var genome;
+
+function init(){
+
+	// lets have one ant with a renderer...
+	// lets not have him evolving. hes just for display purposes.
+	var cont = document.getElementById('minimapcontainer');
+	display_ant = new Ant(new NeuralNetwork(6, 1, 1), new Renderer(cont, arena));
+
+	// plus a bunch of other ants..
+	for (var i=0; i<1000; i++){
+		ants.push(new Ant(new NeuralNetwork(6, 1, 1)));
+	}
+
+	//.. and a genome!
+	genome = new Genome(ants, ants[0].brain.weightCount(), 0.01, 0.05);
+
+	update();
+}
+
+function update(){
+
+	display_ant.update(arena);
+	if (!display_ant.active && genome.fittestGenome != null){
+		display_ant.reset();
+		console.log(genome.totalBest);
+		display_ant.brain.weights(genome.fittestGenome);
+	}
+
+	if (stillActive){
+		stillActive = false;
+		for (var i=0; i<ants.length; i++){
+			var ant = ants[i];
+			ant.update(arena);
+			if (ant.active){
+				stillActive = true;
+			}
+		}
+	} else {
+		genome.epoch();
+		for (var i=0; i<ants.length; i++){
+			ants[i].reset();
+		}
+		stillActive = true;
+	}
+
+	setTimeout(update, 1);
+}
+</script>
+</head>
+<body onload="init()">
+<div id="minimapcontainer">
+</div>
+</body>
+</html>
