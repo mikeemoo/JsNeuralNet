@@ -10,6 +10,32 @@ function Renderer(container, arena){
 	this.miniMapObjects.style.position = 'absolute';
 	container.appendChild(this.miniMapObjects);
 
+	var that = this;
+	this.miniMapObjects.addEventListener('click', function(e) {
+		var x;
+		var y;
+		if (e.pageX || e.pageY) {
+		  x = e.pageX;
+		  y = e.pageY;
+		}
+		else {
+		  x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+		  y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+		}
+		x -= that.miniMapObjects.offsetLeft;
+		y -= that.miniMapObjects.offsetTop;
+
+		x = Math.floor(x/miniMapScale);
+		y = Math.floor(y/miniMapScale);
+
+		arena.map[y][x] = arena.map[y][x] == 1 ? 0 : 1;
+
+		that.miniMap.width = that.miniMap.width;
+		that.drawMiniMap();
+
+	}, false);
+
+
 	this.render = function(ant){
 		//this.resetMiniMap();
 		var objectCtx = this.miniMapObjects.getContext("2d");
