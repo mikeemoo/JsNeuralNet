@@ -13,17 +13,16 @@ var stillActive = true;
 var arena = new Arena();
 var display_ant;
 var genome;
+var renderer;
 
 function init(){
 
-	// lets have one ant with a renderer...
-	// lets not have him evolving. hes just for display purposes.
 	var cont = document.getElementById('minimapcontainer');
-	display_ant = new Ant(new NeuralNetwork(6, 1, 1), new Renderer(cont, arena));
+	renderer = new Renderer(cont, arena);
 
 	// plus a bunch of other ants..
 	for (var i=0; i<100; i++){
-		ants.push(new Ant(new NeuralNetwork(6, 1, 1)));
+		ants.push(new Ant(new NeuralNetwork(6, 1, 1), renderer));
 	}
 
 	//.. and a genome!
@@ -34,19 +33,16 @@ function init(){
 
 function update(){
 
-	display_ant.update(arena);
-	if (!display_ant.active && genome.fittestGenome != null){
-		display_ant.reset();
-		display_ant.brain.weights(genome.fittestGenome.slice(0));
-	}
-
 	if (stillActive){
 		stillActive = false;
+		renderer.resetMiniMap();
 		for (var i=0; i<ants.length; i++){
 			var ant = ants[i];
-			ant.update(arena);
 			if (ant.active){
-				stillActive = true;
+				ant.update(arena);
+				if (ant.active){
+					stillActive = true;
+				}
 			}
 		}
 	} else {
