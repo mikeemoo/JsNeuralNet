@@ -9,10 +9,12 @@ function Ant(brain, renderer){
 	this.rotation = 0;
 
 	this.fitness = 0;
+	this.shake = 0;
 
 	var speed = 1;
 	var moveSpeed = 0.18;
 	var twoPI = Math.PI * 2;
+
 
 	this.update = function(arena){
 		this.frames++;
@@ -24,11 +26,15 @@ function Ant(brain, renderer){
 			renderer.render(this);
 		}
 
-		this.rotation += (output[0] * twoPI)-Math.PI;
+		var rot = (output[0] * twoPI)-Math.PI;
+
+		this.rotation += rot;
 
 		if (!this.move(arena) || this.frames > this.x*10){
-			this.fitness = this.x;
+			this.fitness = this.x - ((this.shake*this.x)/100);
 			this.active = false;
+		}else {
+			this.shake += Math.abs(rot);
 		}
 
 
@@ -40,6 +46,7 @@ function Ant(brain, renderer){
 		this.x = 2;
 		this.y = 2;
 		this.frames = 0;
+		this.shake = 0;
 		this.active = true;
 		if (renderer != null){
 			renderer.resetMiniMap();

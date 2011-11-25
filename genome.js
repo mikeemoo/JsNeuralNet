@@ -8,6 +8,9 @@ function Genome(ants, chromoLength, mutationRate, crossOverRate){
 	this.totalBest = 0;
 	this.generation = 0;
 
+
+	this.stagnant = 1;
+
 	this.crossover = function (p1, p2, c1, c2){
 		if (Math.random() > crossOverRate){
 			for (var i = 0; i < p1.length; i++){
@@ -29,7 +32,7 @@ function Genome(ants, chromoLength, mutationRate, crossOverRate){
 
 	this.mutate = function(c){
 		for (var i = 0; i < c.length; i++){
-			if (Math.random() < mutationRate){
+			if (Math.random() < mutationRate*this.stagnant){
 				c[i] += (Math.random()*2)-1;
 			}
 		}
@@ -58,8 +61,21 @@ function Genome(ants, chromoLength, mutationRate, crossOverRate){
 	this.epoch = function (){
 		this.reset();
 		this.calcStats();
+
 		var i = Math.floor(ants.length * 0.1);
+
 		var newPop = this.grabBest(i);
+		if (this.totalBest == this.bestFitness){
+			this.stagnant++;
+		}else if (this.totalBest > this.bestFitness){
+			this.stagnant = 1;
+			console.log('devolve?!?!?!?!? something is wrong.');
+		}else {
+			this.totalBest = this.bestFitness;
+			this.fittestGenome = newPop[0].slice(0);
+			this.stagnant = 1;
+		}
+
 		while (i < ants.length){
 			var p1 = this.rouletteSelection().brain.weights();
 			var p2 = this.rouletteSelection().brain.weights();
@@ -74,13 +90,19 @@ function Genome(ants, chromoLength, mutationRate, crossOverRate){
 			}
 			i += 2;
 		}
-		//Put the new weights back into the population.
+
 		for (var i = 0; i < ants.length; i++) {
 			ants[i].brain.weights(newPop[i]);
 		}
-
 		this.generation += 1;
 
+	}
+	function sum(a){
+		var s = 0;
+		for (var i=0; i<a.length; i++){
+			s+=a[i];
+		}
+		return s;
 	}
 	this.grabBest = function (num){
 		ants.sort(function(a, b) { return (b.fitness - a.fitness); });
@@ -109,10 +131,6 @@ function Genome(ants, chromoLength, mutationRate, crossOverRate){
 		}
 		this.worstFitness = lowest;
 		this.bestFitness = highest;
-		this.totalBest = Math.max(this.totalBest, this.bestFitness);
-		if (this.bestFitness == this.totalBest){
-			this.fittestGenome = best.brain.weights().slice(0);
-		}
 		this.avgFitness = this.totalFitness / ants.length;
 	}
 

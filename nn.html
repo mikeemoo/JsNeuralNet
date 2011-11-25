@@ -22,12 +22,12 @@ function init(){
 	display_ant = new Ant(new NeuralNetwork(6, 1, 1), new Renderer(cont, arena));
 
 	// plus a bunch of other ants..
-	for (var i=0; i<1000; i++){
+	for (var i=0; i<100; i++){
 		ants.push(new Ant(new NeuralNetwork(6, 1, 1)));
 	}
 
 	//.. and a genome!
-	genome = new Genome(ants, ants[0].brain.weightCount(), 0.01, 0.05);
+	genome = new Genome(ants, ants[0].brain.weightCount(), 0.01, 0.1);
 
 	update();
 }
@@ -37,8 +37,7 @@ function update(){
 	display_ant.update(arena);
 	if (!display_ant.active && genome.fittestGenome != null){
 		display_ant.reset();
-		console.log(genome.totalBest);
-		display_ant.brain.weights(genome.fittestGenome);
+		display_ant.brain.weights(genome.fittestGenome.slice(0));
 	}
 
 	if (stillActive){
