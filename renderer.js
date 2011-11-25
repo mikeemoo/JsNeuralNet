@@ -11,7 +11,7 @@ function Renderer(container, arena){
 	container.appendChild(this.miniMapObjects);
 
 	this.render = function(ant){
-		this.resetMiniMap();
+		//this.resetMiniMap();
 		var objectCtx = this.miniMapObjects.getContext("2d");
 		objectCtx.fillStyle = "red";
 		objectCtx.fillRect(
