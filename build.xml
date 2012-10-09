@@ -2,7 +2,7 @@
 
 <project name="JsNeuralNet" default="build">
 
-	<taskdef name="jslint" classname="com.googlecode.jslint4java.ant.JSLintTask" classpath="build/lib/jslint4java-2.0.1.jar" />
+	<taskdef name="jslint" classname="com.googlecode.jslint4java.ant.JSLintTask" classpath="build/lib/jslint4java-2.0.2.jar" />
 
 	<target name="clean" description="Cleanup build artifacts">
 		<delete dir="${basedir}/build/jslint"/>
