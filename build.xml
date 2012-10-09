@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="JsNeuralNet" default="build">
+
+	<taskdef name="jslint" classname="com.googlecode.jslint4java.ant.JSLintTask" classpath="build/lib/jslint4java-2.0.1.jar" />
+
+	<target name="clean" description="Cleanup build artifacts">
+		<delete dir="${basedir}/build/jslint"/>
+		<delete dir="${basedir}/build/logs"/>
+	</target>
+
+	<target name="prepare" depends="clean" description="Prepare for build">
+		<mkdir dir="${basedir}/build/jslint"/>
+		<mkdir dir="${basedir}/build/logs"/>
+	</target>
+
+	<target name="build" depends="prepare,jslint"/>
+
+	</target>
+
+	<target name="jslint">
+		<jslint haltOnFailure="false">
+			<formatter type="xml" destfile="${basedir}/build/jslint/jslint.xml"/>
+			<fileset dir="${basedir}/src">
+				<include name="**/*.js" />
+			</fileset>
+		</jslint>
+	</target>
+
+</project>
