@@ -1,1 +1,0 @@
-http://mikeemoo.github.com/JsNeuralNet/
