@@ -16,8 +16,6 @@
 
 	<target name="build" depends="prepare,jslint"/>
 
-	</target>
-
 	<target name="jslint">
 		<jslint haltOnFailure="false">
 			<formatter type="xml" destfile="${basedir}/build/jslint/jslint.xml"/>
