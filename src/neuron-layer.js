@@ -74,7 +74,7 @@ NeuronLayer.prototype.getOutputs = function (inputs) {
     var out = [], i;
 
     for (i = 0; i < this.neurons.length; i += 1) {
-        out.push(this.neurons[i].output(inputs));
+        out.push(this.neurons[i].getOutputs(inputs));
     }
 
     return out;
