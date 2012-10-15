@@ -10,7 +10,7 @@ var inputs = [
     Math.random(),
     Math.random()
 ];
-var output = neuron.output(inputs);
+var output = neuron.getOutputs(inputs);
 
 test("Validate neuron", function () {
 
@@ -21,7 +21,7 @@ test("Validate neuron", function () {
     inputs.push(Math.random());
 
     throws(function() {
-        neuron.output(inputs);
-    }, 'output() with an inccorect number of arguments throws an InvalidArgumentError');
+        neuron.getOutputs(inputs);
+    }, 'getOutputs() with an inccorect number of arguments throws an InvalidArgumentError');
 
 });

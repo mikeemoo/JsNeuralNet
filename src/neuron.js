@@ -11,7 +11,7 @@ function Neuron(numWeights) {
     }
 
 }
-Neuron.prototype.output = function (inputs) {
+Neuron.prototype.getOutputs = function (inputs) {
 
     if (inputs.length != this.weights.length - 1) {
         throw new InvalidArgumentError();
